@@ -6,3 +6,5 @@ League of Legends, personagens, imagens e todos os outros conteúdos protegidos 
 
 ## Avisos legais sobre o uso de imagens e dados da Riot Games
 A Riot Games permite diretamente que sites de terceiros usem sua arte e skins de campeões.
+
+### Ainda estou desenvolvendo os arquivos para o sql que em breve estará disponivel 
