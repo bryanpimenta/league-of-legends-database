@@ -1,12 +1,11 @@
 const fs = require('fs');
-const championFull = require('../data/14.5.1_global/14.5.1/data/pt_BR/championFull.json');
 
-function formattingImage(championName) {
+function formattingImage(championName, patch) {
     const URL = "https://ddragon.leagueoflegends.com/cdn";
 
     let full = `${URL}/img/champion/splash/${championName}_0.jpg`;
     let loading = `${URL}/img/champion/loading/${championName}_0.jpg`;
-    let square = `${URL}/14.5.1/img/champion/${championName}.png`;
+    let square = `${URL}/${patch}/img/champion/${championName}.png`;
 
     return {
         full,
@@ -35,7 +34,7 @@ function formattingSkins(championName, skins) {
     return newSkins;
 };
 
-function formattingSpells(spells) {
+function formattingSpells(spells, patch) {
     const newSpells = [];
     const URL = "https://ddragon.leagueoflegends.com/cdn";
 
@@ -45,7 +44,7 @@ function formattingSpells(spells) {
             id: spell.id,
             name: spell.name,
             description: spell.description,
-            image: `${URL}/14.5.1/img/spell/${spell.id}.png`,
+            image: `${URL}/${patch}/img/spell/${spell.id}.png`,
         };
         newSpells.push(newSpell);
     }
@@ -53,20 +52,20 @@ function formattingSpells(spells) {
     return newSpells;
 };
 
-function formattingPassive(passive) {
+function formattingPassive(passive, patch) {
     const URL = "https://ddragon.leagueoflegends.com/cdn";
     const passiveName = passive.image.full;
 
     const newPassive = {
         name: passive.name,
         description: passive.description,
-        image: `${URL}/14.5.1/img/passive/${passiveName}`,
+        image: `${URL}/${patch}/img/passive/${passiveName}`,
     };
 
     return newPassive;
 }
 
-async function dataFilteringAndFormatting() {
+async function dataFilteringAndFormatting(championFull, patch) {
     const newChampionFull = {};
 
     for (let i in championFull.data) {
@@ -76,15 +75,15 @@ async function dataFilteringAndFormatting() {
             key: champion.key,
             name: champion.name,
             title: champion.title,
-            image: formattingImage(champion.id),
+            image: formattingImage(champion.id, patch),
             skins: formattingSkins(champion.id, champion.skins),
             lore: champion.lore,
             tags: champion.tags,
             partype: champion.partype,
             info: champion.info,
             stats: champion.stats,
-            spells: formattingSpells(champion.spells),
-            passive: formattingPassive(champion.passive),
+            spells: formattingSpells(champion.spells, patch),
+            passive: formattingPassive(champion.passive, patch),
         };
         newChampionFull[champion.id] = newChampion;
     }
@@ -103,8 +102,30 @@ function writeJSONFile(data, fileName) {
     });
 }
 
+async function readFileAndDefinePatch() {
+    return new Promise((resolve, reject) => {
+        const dir_name = "./data/";
+        fs.readdir(dir_name, (err, files) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log("Arquivos com nome _global:");
+                files.forEach(file => {
+                    if (file.includes("_global")) {
+                        resolve(file.replace('_global', ''));
+                        console.log(file);
+                    }
+                });
+            }
+        });
+    });
+}
+
+
 async function main() {
-    const newChampionFull = await dataFilteringAndFormatting();
+    const patch = await readFileAndDefinePatch();
+    const championFull = require(`../data/${patch}_global/${patch}/data/pt_BR/championFull.json`);
+    const newChampionFull = await dataFilteringAndFormatting(championFull, patch);
     writeJSONFile(newChampionFull, './data/newChampionsFull_Filtered.json');
 }
 
