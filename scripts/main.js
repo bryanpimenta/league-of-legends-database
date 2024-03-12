@@ -1,6 +1,8 @@
 const fs = require('fs');
 const GLOBAL_URL = "https://ddragon.leagueoflegends.com/cdn";
 
+const create_database = require("./create_database.js");
+
 function formattingImage(championName, patch) {
     let full = `${GLOBAL_URL}/img/champion/splash/${championName}_0.jpg`;
     let loading = `${GLOBAL_URL}/img/champion/loading/${championName}_0.jpg`;
@@ -62,7 +64,9 @@ function formattingPassive(passive, patch) {
 }
 
 async function dataFilteringAndFormatting(championFull, patch) {
-    const newChampionFull = {};
+    const newChampionFull = {
+        keys: championFull.keys,
+    };
 
     for (let i in championFull.data) {
         const champion = championFull.data[i];
@@ -87,7 +91,7 @@ async function dataFilteringAndFormatting(championFull, patch) {
     return newChampionFull;
 };
 
-function writeJSONFile(data, fileName) {
+async function writeJSONFile(data, fileName, fn) {
     const jsonData = JSON.stringify(data, null, 2);
     fs.writeFile(fileName, jsonData, (err) => {
         if (err) {
@@ -117,12 +121,13 @@ async function readFileAndDefinePatch() {
     });
 }
 
-
 async function main() {
     const patch = await readFileAndDefinePatch();
     const championFull = require(`../data/${patch}_global/${patch}/data/pt_BR/championFull.json`);
     const newChampionFull = await dataFilteringAndFormatting(championFull, patch);
-    writeJSONFile(newChampionFull, './data/newChampionsFull_Filtered.json');
+    await writeJSONFile(newChampionFull, './data/newChampionsFull_Filtered.json');
+    await create_database(newChampionFull, patch);
+    console.log("Database created");
 }
 
 main();
