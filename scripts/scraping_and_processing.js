@@ -1,11 +1,10 @@
 const fs = require('fs');
+const GLOBAL_URL = "https://ddragon.leagueoflegends.com/cdn";
 
 function formattingImage(championName, patch) {
-    const URL = "https://ddragon.leagueoflegends.com/cdn";
-
-    let full = `${URL}/img/champion/splash/${championName}_0.jpg`;
-    let loading = `${URL}/img/champion/loading/${championName}_0.jpg`;
-    let square = `${URL}/${patch}/img/champion/${championName}.png`;
+    let full = `${GLOBAL_URL}/img/champion/splash/${championName}_0.jpg`;
+    let loading = `${GLOBAL_URL}/img/champion/loading/${championName}_0.jpg`;
+    let square = `${GLOBAL_URL}/${patch}/img/champion/${championName}.png`;
 
     return {
         full,
@@ -16,17 +15,16 @@ function formattingImage(championName, patch) {
 
 function formattingSkins(championName, skins) {
     const newSkins = [];
-    const URL = "https://ddragon.leagueoflegends.com/cdn";
-    const full = (championName, num) => `${URL}/img/champion/splash/${championName}_${num}.jpg`;
-    const loading = (championName, num) => `${URL}/img/champion/loading/${championName}_${num}.jpg`;
+    const define_url = (championName, num, type) => `${GLOBAL_URL}/img/champion/${type}/${championName}_${num}.jpg`;
 
     for (let i in skins) {
         const skin = skins[i];
         const newSkin = {
             id: skin.id,
             name: skin.name,
-            splashArt: full(championName, skin.num),
-            splashLoading: loading(championName, skin.num)
+            splash: define_url(championName, skin.num, 'splash'),
+            centered: define_url(championName, skin.num, 'centered'),
+            loading: define_url(championName, skin.num, 'loading'),
         };
         newSkins.push(newSkin);
     }
@@ -36,7 +34,6 @@ function formattingSkins(championName, skins) {
 
 function formattingSpells(spells, patch) {
     const newSpells = [];
-    const URL = "https://ddragon.leagueoflegends.com/cdn";
 
     for (let i in spells) {
         const spell = spells[i];
@@ -44,7 +41,7 @@ function formattingSpells(spells, patch) {
             id: spell.id,
             name: spell.name,
             description: spell.description,
-            image: `${URL}/${patch}/img/spell/${spell.id}.png`,
+            image: `${GLOBAL_URL}/${patch}/img/spell/${spell.id}.png`,
         };
         newSpells.push(newSpell);
     }
@@ -53,13 +50,12 @@ function formattingSpells(spells, patch) {
 };
 
 function formattingPassive(passive, patch) {
-    const URL = "https://ddragon.leagueoflegends.com/cdn";
     const passiveName = passive.image.full;
 
     const newPassive = {
         name: passive.name,
         description: passive.description,
-        image: `${URL}/${patch}/img/passive/${passiveName}`,
+        image: `${GLOBAL_URL}/${patch}/img/passive/${passiveName}`,
     };
 
     return newPassive;
