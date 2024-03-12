@@ -9,8 +9,7 @@ const leagueOfLegends_database = `CREATE DATABASE IF NOT EXISTS LeagueOfLegendsD
 USE LeagueOfLegendsDataBase;`;
 
 const champion = `CREATE TABLE Champion (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    \`key\` VARCHAR(255),
+    \`key\` VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255),
     title VARCHAR(255),
     lore TEXT,
@@ -19,33 +18,50 @@ const champion = `CREATE TABLE Champion (
     image_full VARCHAR(255),
     image_loading VARCHAR(255),
     image_square VARCHAR(255)
-);`;
-
-const skins = `CREATE TABLE skin_champion (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    champion_id INT,
-    name VARCHAR(255),
-    splash VARCHAR(255),
-    centered VARCHAR(255),
-    loading VARCHAR(255),
-    FOREIGN KEY (champion_id) REFERENCES champion(key)
     );`;
+    
+    const skins = `CREATE TABLE ChampionSkin (
+        id INT PRIMARY KEY,
+        champion_id VARCHAR(255),
+        name VARCHAR(255),
+        splash VARCHAR(255),
+        centered VARCHAR(255),
+        loading VARCHAR(255),
+        FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
+        );`;
 
-const skin_labels = ['champion_id', 'name', 'splash', 'centered', 'loading'];
+function insert_championSkin(data) {
+    const skin_labels = ['id', 'champion_id', 'name', 'splash', 'centered', 'loading'];
+    let insert = `INSERT INTO ChampionSkin (${skin_labels.join(', ')}) VALUES`;
+    Object.values(data.keys).forEach(champion => {
+        const championName = data[champion];
+        const skins = championName.skins;
+        skins.forEach(skin => {
+            insert += '\n';
+            insert += `('${skin.id}', '${data[champion].key}', '${escapeSingleQuotes(skin.name)}', '${skin.splash}', '${skin.centered}', '${skin.loading}'),`;
+        });
+    });
+        
+    insert = insert.slice(0, -1);
+    insert += ';';
+        
+    console.log(insert);
+    return insert;
+}
 
-const info = `CREATE TABLE info_champion (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    champion_id INT,
-    attack INT,
-    defense INT,
-    magic INT,
-    difficulty INT,
+const info = `CREATE TABLE ChampionInfo (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            champion_id INT,
+            attack INT,
+            defense INT,
+            magic INT,
+            difficulty INT,
     FOREIGN KEY (champion_id) REFERENCES champion(key)
     );`;
 
 const info_labels = ['champion_id', 'attack', 'defense', 'magic', 'difficulty'];
 
-const stats = `CREATE TABLE stats_champion (
+const stats = `CREATE TABLE ChampionStats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     champion_id INT,
     hp INT,
@@ -73,7 +89,7 @@ const stats = `CREATE TABLE stats_champion (
 
 const stats_labels = ['champion_id', 'hp', 'hpperlevel', 'mp', 'mpperlevel', 'movespeed', 'armor', 'armorperlevel', 'spellblock', 'spellblockperlevel', 'attackrange', 'hpregen', 'hpregenperlevel', 'mpregen', 'mpregenperlevel', 'crit', 'critperlevel', 'attackdamage', 'attackdamageperlevel', 'attackspeedperlevel', 'attackspeed'];
 
-const spells = `CREATE TABLE spells_champion (
+const spells = `CREATE TABLE ChampionSpells (
     id INT AUTO_INCREMENT PRIMARY KEY,
     champion_id INT,
     name VARCHAR(255),
@@ -84,7 +100,7 @@ const spells = `CREATE TABLE spells_champion (
 
 const spells_labels = ['champion_id', 'name', 'description', 'image'];
 
-const passive = `CREATE TABLE passive_champion (
+const passive = `CREATE TABLE ChampionPassive (
     id INT AUTO_INCREMENT PRIMARY KEY,
     champion_id INT,
     name VARCHAR(255),
@@ -115,6 +131,7 @@ function insert_data(table, labels, data) {
     return insert;
 };
 
+
 function insert_champion(data) {
     const champion_labels = ['name', 'title', 'lore', 'tags', 'partype', 'image_full', 'image_loading', 'image_square'];
     let insert = `INSERT INTO Champion (\`key\`, ${champion_labels.join(', ')}) VALUES`;
@@ -128,7 +145,6 @@ function insert_champion(data) {
     insert = insert.slice(0, -1);
     insert += ';';
 
-    console.log(insert);
     return insert;
 }
 
@@ -139,6 +155,9 @@ async function writeSQLFile(data, fileName, fn) {
 async function create_database(newChampionFull, patch) {
     const champion_table = champion;
     const champion_insert = insert_champion(newChampionFull);
+
+    const skins_table = skins;
+    const championSkin_insert = insert_championSkin(newChampionFull);
 
 /*     const skins_table = skins;
     const skins_insert = insert_data("skin_champion", skin_labels, newChampionFull);
@@ -156,7 +175,7 @@ async function create_database(newChampionFull, patch) {
     const passive_insert = insert_data("passive_champion", passive_labels, newChampionFull); */
 
     // const database = `${champion_table}\n${champion_insert}\n${skins_table}\n${skins_insert}\n${info_table}\n${info_insert}\n${stats_table}\n${stats_insert}\n${spells_table}\n${spells_insert}\n${passive_table}\n${passive_insert}`;
-    const database = `${leagueOfLegends_database}\n\n${champion_table}\n\n${champion_insert}`;
+    const database = `${leagueOfLegends_database}\n\n${champion_table}\n\n${champion_insert}\n\n${skins_table}\n\n${championSkin_insert}`;
     await writeSQLFile(database, `database_${patch}.sql`, (err) => {
         if (err) {
             console.log(err);
