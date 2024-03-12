@@ -1,10 +1,14 @@
-# League of Legends - Database
-A única intenção deste banco de dados é fornecer uma coleção de recursos de League of Legends para sites, aplicativos e treinar SQL de bases de fãs.
+# League of Legends - Data base
+Este repositório contém um banco de dados voltado para fornecer recursos relacionados ao League of Legends para sites e aplicativos de base de fãs. É uma iniciativa pessoal para aprimorar habilidades em SQL e servir como um projeto de aprendizado.
 
-## Copyright
-League of Legends, personagens, imagens e todos os outros conteúdos protegidos por direitos autorais relacionados a League of Legends são propriedade da Riot Games, Inc.
+## Direitos Autorais
+League of Legends, personagens, imagens e todo o conteúdo protegido por direitos autorais relacionado ao League of Legends são propriedade da Riot Games, Inc.
 
-## Avisos legais sobre o uso de imagens e dados da Riot Games
-A Riot Games permite diretamente que sites de terceiros usem sua arte e skins de campeões.
+## Aviso Legal sobre Uso de Imagens e Dados da Riot Games
+A Riot Games permite explicitamente que sites de terceiros usem sua arte e skins de campeões.
 
-### Ainda estou desenvolvendo os arquivos para o sql que em breve estará disponivel 
+## Estrutura do Banco de Dados
+Atualmente, o banco de dados foi organizado principalmente para os "campeões" do jogo, contendo algumas informações relevantes sobre eles. Em breve, planejo adicionar mais entidades, como ícones, runas e talentos.
+
+## Feedbacks
+Feedbacks e sugestões são bem-vindos! Se você tiver ideias para melhorias ou encontrar problemas técnicos, por favor, compartilhe. Esses feedbacks serão importantes.
