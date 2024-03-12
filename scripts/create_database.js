@@ -18,7 +18,7 @@ const champion = `CREATE TABLE Champion (
     image_full VARCHAR(255),
     image_loading VARCHAR(255),
     image_square VARCHAR(255)
-    );`;
+);`;
 
 const skins = `CREATE TABLE ChampionSkin (
     id INT PRIMARY KEY,
@@ -139,7 +139,6 @@ function insert_championSpell(data) {
 
     insert = insert.slice(0, -1);
     insert += ';';
-    console.log(insert);
 
     return insert;
 }
@@ -151,30 +150,24 @@ const passive = `CREATE TABLE ChampionPassive (
     name VARCHAR(255),
     description TEXT,
     image VARCHAR(255),
-    FOREIGN KEY (champion_id) REFERENCES champion(key)
+    FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
 );`;
 
-const passive_labels = ['champion_id', 'name', 'description', 'image'];
+function insert_championPassive(data) {
+    const passive_labels = ['champion_id', 'name', 'description', 'image'];
+    let insert = `INSERT INTO ChampionPassive (${passive_labels.join(', ')}) VALUES`;
+    Object.values(data.keys).forEach(champion => {
+        const championName = data[champion];
+        const passive = championName.passive;
+        insert += '\n';
+        insert += `('${data[champion].key}', '${escapeSingleQuotes(passive.name)}', '${escapeSingleQuotes(passive.description)}', '${passive.image}'),`;
+    });
 
-function insert_data(table, labels, data) {
-    let insert = `INSERT INTO ${table} (`;
-
-    for (let i in labels) {
-        insert += `${labels[i]}, `;
-    }
-
-    insert = insert.slice(0, -2);
-    insert += ') VALUES (';
-
-    for (let i in data) {
-        insert += `'${data[i]}', `;
-    }
-
-    insert = insert.slice(0, -2);
-    insert += ');';
+    insert = insert.slice(0, -1);
+    insert += ';';
 
     return insert;
-};
+}
 
 function insert_champion(data) {
     const champion_labels = ['name', 'title', 'lore', 'tags', 'partype', 'image_full', 'image_loading', 'image_square'];
@@ -212,14 +205,10 @@ async function create_database(newChampionFull, patch) {
     const spells_table = spells;
     const spells_insert = insert_championSpell(newChampionFull);
 
-    
-/*      const spells_table = spells;
-        const spells_insert = insert_data("spells_champion", spells_labels, newChampionFull);
-    
-        const passive_table = passive;
-        const passive_insert = insert_data("passive_champion", passive_labels, newChampionFull); */
+    const passive_table = passive;
+    const passive_insert = insert_championPassive(newChampionFull);
 
-    const database = `${leagueOfLegends_database}\n\n${champion_table}\n\n${champion_insert}\n\n${skins_table}\n\n${skin_insert}\n\n${info_table}\n\n${info_insert}\n\n${stats_table}\n\n${stats_insert}\n\n${spells_table}\n\n${spells_insert}`;
+    const database = `${leagueOfLegends_database}\n\n${champion_table}\n\n${champion_insert}\n\n${skins_table}\n\n${skin_insert}\n\n${info_table}\n\n${info_insert}\n\n${stats_table}\n\n${stats_insert}\n\n${spells_table}\n\n${spells_insert}\n\n${passive_table}\n\n${passive_insert}`;
     await writeSQLFile(database, `database_${patch}.sql`, (err) => {
         if (err) {
             console.log(err);
