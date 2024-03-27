@@ -12,8 +12,8 @@ League of Legends, personagens, imagens e todo o conteúdo protegido por direito
 A Riot Games permite explicitamente que sites de terceiros usem sua arte e skins de campeões.
 
 
-### Estrutura do Banco de Dados
-Perdi o diagrama relacional das tabelas mas vou refazer e postar logo.
+### Diagrama Relacional
+![Diagrama Relacional do LolDatabase](./data/LeagueOfLegendsDB-Diagrama-ER.png)
 
 
 Atualmente, o banco de dados foi organizado principalmente para os "campeões" do jogo, contendo algumas informações relevantes sobre eles. Em breve, planejo adicionar mais entidades, como ícones, runas e talentos.

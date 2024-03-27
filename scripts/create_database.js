@@ -1,34 +1,17 @@
 const fs = require('fs');
 
+const {
+    leagueOfLegends_database,
+    champion,
+    skins,
+    info,
+    stats,
+    spells,
+    passive } = require('./tables.js');
+
 function escapeSingleQuotes(str) {
     return str.replace(/'/g, "\\'");
 }
-
-const leagueOfLegends_database = `CREATE DATABASE IF NOT EXISTS LeagueOfLegendsDataBase;
-
-USE LeagueOfLegendsDataBase;`;
-
-const champion = `CREATE TABLE Champion (
-    \`key\` VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255),
-    title VARCHAR(255),
-    lore TEXT,
-    tags TEXT,
-    partype VARCHAR(255),
-    image_full VARCHAR(255),
-    image_loading VARCHAR(255),
-    image_square VARCHAR(255)
-);`;
-
-const skins = `CREATE TABLE ChampionSkin (
-    id INT PRIMARY KEY,
-    champion_id VARCHAR(255),
-    name VARCHAR(255),
-    splash VARCHAR(255),
-    centered VARCHAR(255),
-    loading VARCHAR(255),
-    FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
-);`;
 
 function insert_championSkin(data) {
     const skin_labels = ['id', 'champion_id', 'name', 'splash', 'centered', 'loading'];
@@ -48,16 +31,6 @@ function insert_championSkin(data) {
     return insert;
 }
 
-const info = `CREATE TABLE ChampionInfo (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    champion_id CHAR(255),
-    attack INT,
-    defense INT,
-    magic INT,
-    difficulty INT,
-    FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
-);`;
-
 function insert_championInfo(data) {
     const info_labels = ['champion_id', 'attack', 'defense', 'magic', 'difficulty'];
     let insert = `INSERT INTO ChampionInfo (${info_labels.join(', ')}) VALUES`;
@@ -74,32 +47,6 @@ function insert_championInfo(data) {
     return insert;
 }
 
-const stats = `CREATE TABLE ChampionStats (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    champion_id CHAR(255),
-    hp INT,
-    hpperlevel INT,
-    mp INT,
-    mpperlevel INT,
-    movespeed INT,
-    armor INT,
-    armorperlevel INT,
-    spellblock INT,
-    spellblockperlevel INT,
-    attackrange INT,
-    hpregen INT,
-    hpregenperlevel INT,
-    mpregen INT,
-    mpregenperlevel INT,
-    crit INT,
-    critperlevel INT,
-    attackdamage INT,
-    attackdamageperlevel INT,
-    attackspeedperlevel INT,
-    attackspeed INT,
-    FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
-);`;
-
 function insert_championStats(data) {
     const stats_labels = ['champion_id', 'hp', 'hpperlevel', 'mp', 'mpperlevel', 'movespeed', 'armor', 'armorperlevel', 'spellblock', 'spellblockperlevel', 'attackrange', 'hpregen', 'hpregenperlevel', 'mpregen', 'mpregenperlevel', 'crit', 'critperlevel', 'attackdamage', 'attackdamageperlevel', 'attackspeedperlevel', 'attackspeed'];
     let insert = `INSERT INTO ChampionStats (${stats_labels.join(', ')}) VALUES`;
@@ -115,15 +62,6 @@ function insert_championStats(data) {
 
     return insert;
 }
-
-const spells = `CREATE TABLE ChampionSpell (
-    id CHAR(255) PRIMARY KEY,
-    champion_id CHAR(255),
-    name VARCHAR(255),
-    description TEXT,
-    image VARCHAR(255),
-    FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
-);`;
 
 function insert_championSpell(data) {
     const spells_labels = ['id', 'champion_id', 'name', 'description', 'image'];
@@ -142,16 +80,6 @@ function insert_championSpell(data) {
 
     return insert;
 }
-
-
-const passive = `CREATE TABLE ChampionPassive (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    champion_id CHAR(255),
-    name VARCHAR(255),
-    description TEXT,
-    image VARCHAR(255),
-    FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
-);`;
 
 function insert_championPassive(data) {
     const passive_labels = ['champion_id', 'name', 'description', 'image'];
