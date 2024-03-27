@@ -123,7 +123,8 @@ async function readFileAndDefinePatch() {
 
 async function main() {
     const patch = await readFileAndDefinePatch();
-    const championFull = require(`../data/${patch}_global/${patch}/data/pt_BR/championFull.json`);
+    const championFull = require(`../data/${patch}_global/data/pt_BR/championFull.json`);
+    // const championFull = require(`../data/${patch}_global/${patch}/data/pt_BR/championFull.json`);
     const newChampionFull = await dataFilteringAndFormatting(championFull, patch);
     await writeJSONFile(newChampionFull, './data/newChampionsFull_Filtered.json');
     await create_database(newChampionFull, patch);
