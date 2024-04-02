@@ -1,7 +1,7 @@
 # League of Legends - Database
 Este repositório contém um banco de dados voltado para fornecer recursos relacionados ao League of Legends para sites e aplicativos de base de fãs. É uma iniciativa pessoal para aprimorar habilidades em SQL e servir como um projeto de aprendizado.
 
-A Riot Games disponibiliza todo o conteúdo atualizado relacionado ao jogo através do link [https://developer.riotgames.com/docs/lol](https://developer.riotgames.com/docs/lol), apenas baixei o patch atual.
+A Riot Games disponibiliza todo o conteúdo atualizado relacionado ao jogo através do [link](https://developer.riotgames.com/docs/lol). Apenas baixei o patch atual.
 
 ##
 ### Direitos Autorais
