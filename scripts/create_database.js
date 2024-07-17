@@ -136,7 +136,32 @@ async function create_database(newChampionFull, patch) {
     const passive_table = passive;
     const passive_insert = insert_championPassive(newChampionFull);
 
-    const database = `${leagueOfLegends_database}\n\n${champion_table}\n\n${champion_insert}\n\n${skins_table}\n\n${skin_insert}\n\n${info_table}\n\n${info_insert}\n\n${stats_table}\n\n${stats_insert}\n\n${spells_table}\n\n${spells_insert}\n\n${passive_table}\n\n${passive_insert}`;
+    const database = `${leagueOfLegends_database}
+
+${champion_table}
+
+${champion_insert}
+
+${skins_table}
+
+${skin_insert}
+
+${info_table}
+
+${info_insert}
+
+${stats_table}
+
+${stats_insert}
+
+${spells_table}
+
+${spells_insert}
+
+${passive_table}
+
+${passive_insert}`;
+
     await writeSQLFile(database, `./db/database_${patch}.sql`, (err) => {
         if (err) {
             console.log(err);

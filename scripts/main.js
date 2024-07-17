@@ -128,7 +128,7 @@ async function main() {
     const newChampionFull = await dataFilteringAndFormatting(championFull, patch);
     await writeJSONFile(newChampionFull, './data/newChampionsFull_Filtered.json');
     await create_database(newChampionFull, patch);
-    console.log("Database created");
+    console.log(`Database patch${patch} created`);
 }
 
 main();
