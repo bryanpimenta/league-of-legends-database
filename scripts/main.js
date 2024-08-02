@@ -19,6 +19,8 @@ function formattingSkins(championName, skins) {
     const newSkins = [];
     const define_url = (championName, num, type) => `${GLOBAL_URL}/img/champion/${type}/${championName}_${num}.jpg`;
 
+    const modelView = (id) => `https://modelviewer.lol/pt-BR/model-viewer?id=${id}`;
+
     for (let i in skins) {
         const skin = skins[i];
         const newSkin = {
@@ -27,6 +29,7 @@ function formattingSkins(championName, skins) {
             splash: define_url(championName, skin.num, 'splash'),
             centered: define_url(championName, skin.num, 'centered'),
             loading: define_url(championName, skin.num, 'loading'),
+            model_view: modelView(skin.id),
         };
         newSkins.push(newSkin);
     }

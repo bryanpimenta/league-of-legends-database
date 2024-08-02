@@ -14,14 +14,14 @@ function escapeSingleQuotes(str) {
 }
 
 function insert_championSkin(data) {
-    const skin_labels = ['id', 'champion_id', 'name', 'splash', 'centered', 'loading'];
+    const skin_labels = ['id', 'champion_id', 'name', 'splash', 'centered', 'loading', 'model_view'];
     let insert = `INSERT INTO ChampionSkin (${skin_labels.join(', ')}) VALUES`;
     Object.values(data.keys).forEach(champion => {
         const championName = data[champion];
         const skins = championName.skins;
         skins.forEach(skin => {
             insert += '\n';
-            insert += `('${skin.id}', '${data[champion].key}', '${escapeSingleQuotes(skin.name)}', '${skin.splash}', '${skin.centered}', '${skin.loading}'),`;
+            insert += `('${skin.id}', '${data[champion].key}', '${escapeSingleQuotes(skin.name)}', '${skin.splash}', '${skin.centered}', '${skin.loading}', '${skin.model_view}'),`;
         });
     });
 
@@ -64,7 +64,7 @@ function insert_championStats(data) {
 }
 
 function insert_championSpell(data) {
-    const spells_labels = ['id', 'champion_id', 'name', 'description', 'image'];
+    const spells_labels = ['key_board', 'champion_id', 'name', 'description', 'image'];
     let insert = `INSERT INTO ChampionSpell (${spells_labels.join(', ')}) VALUES`;
     Object.values(data.keys).forEach(champion => {
         const championName = data[champion];
@@ -162,7 +162,7 @@ ${passive_table}
 
 ${passive_insert}`;
 
-    await writeSQLFile(database, `./db/database_${patch}.sql`, (err) => {
+    await writeSQLFile(database, `./db/patch_${patch}.sql`, (err) => {
         if (err) {
             console.log(err);
         } else {

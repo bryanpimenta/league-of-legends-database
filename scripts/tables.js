@@ -21,6 +21,7 @@ const skins = `CREATE TABLE ChampionSkin (
     splash VARCHAR(255),
     centered VARCHAR(255),
     loading VARCHAR(255),
+    model_view VARCHAR(255),
     FOREIGN KEY (champion_id) REFERENCES Champion(\`key\`)
 );`;
 
@@ -61,7 +62,8 @@ const stats = `CREATE TABLE ChampionStats (
 );`;
 
 const spells = `CREATE TABLE ChampionSpell (
-    id CHAR(255) PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    key_board CHAR(255),
     champion_id CHAR(255),
     name VARCHAR(255),
     description TEXT,
